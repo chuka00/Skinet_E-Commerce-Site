@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Skinet.DAL;
+
 namespace Skinet
 {
     public class Program
@@ -13,6 +16,9 @@ namespace Skinet
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<StoreDbContext>(options =>
+           options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection")));
 
             var app = builder.Build();
 
@@ -29,6 +35,8 @@ namespace Skinet
 
 
             app.MapControllers();
+
+            using var scope = app.Services.CreateScope();
 
             app.Run();
         }
